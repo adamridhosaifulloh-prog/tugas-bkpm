@@ -10,7 +10,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Base URL project
-$basePath = 'tugas-bkpm/Tgs_Workshop_Web_Server/Bkpm_Acara_6/public';
+$basePath = '/tugas-bkpm/Tgs_Workshop_Web_Server/Bkpm_Acara_6/public';
 
 // Hapus base path
 if (str_starts_with($uri, $basePath)) {

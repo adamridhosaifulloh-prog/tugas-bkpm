@@ -1,6 +1,5 @@
 <?php
-$alert = $_SESSION['alert'] ?? null;
-unset($_SESSION['alert']);
+$flash = getFlash();   // flash message: tampil sekali lalu hilang
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -17,8 +16,6 @@ unset($_SESSION['alert']);
         <span class="navbar-brand">SI Akademik</span>
         <div class="navbar-nav">
             <a class="nav-link" href="<?= url('/mahasiswa') ?>">Mahasiswa</a>
-            <a class="nav-link" href="<?= url('/prodi') ?>">Prodi</a>
-            <a class="nav-link" href="<?= url('/matakuliah') ?>">Mata Kuliah</a>
         </div>
         <div class="ms-auto d-flex align-items-center">
             <span class="navbar-text me-3"><?= e($_SESSION['user_name'] ?? '') ?></span>
@@ -28,6 +25,7 @@ unset($_SESSION['alert']);
 </nav>
 
 <main class="container pb-5">
-    <?php if ($alert): ?>
-        <div class="alert alert-<?= e($alert['type']) ?>"><?= e($alert['message']) ?></div>
+    <?php if ($flash): ?>
+        <?php $ikon = $flash['type'] === 'success' ? '✓ ' : ($flash['type'] === 'danger' ? '✕ ' : ''); ?>
+        <div class="alert alert-<?= e($flash['type']) ?>"><?= $ikon . e($flash['message']) ?></div>
     <?php endif; ?>

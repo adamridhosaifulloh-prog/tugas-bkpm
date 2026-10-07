@@ -10,13 +10,12 @@ $method = $_SERVER['REQUEST_METHOD'];
   <h2>Request ini menggunakan method POST</h2>
   <p>Halo, <?= htmlspecialchars($_POST['nama'] ?? '(kosong)') ?>! Data dikirim lewat body, tidak tampak di URL.</p>
 <?php else: ?>
-  <h2>Request ini menggunakan method GET</h2>
-  <p>Halaman dibuka langsung / data dikirim lewat URL. Isi form di bawah untuk mencoba POST.</p>
+  <h2>tugas mandiri</h2>
 <?php endif; ?>
   <form action="cek-method.php" method="POST">
     <input type="text" name="nama" placeholder="Nama">
-    <button type="submit">Kirim (POST)</button>
+    <button type="submit">Kirim </button>
   </form>
-  <p><a href="cek-method.php">Kirim ulang sebagai GET</a></p>
+  <p><a href="cek-method.php">Kirim ulang </a></p>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tes POST API Mahasiswa</title>
+</head>
+<body>
+    <h2>Form Tambah Mahasiswa (Tes POST API)</h2>
+    <form id="formMahasiswa">
+        <label>NIM:</label><br>
+        <input type="text" id="nim" value="23004" required><br><br>
+        
+        <label>Nama:</label><br>
+        <input type="text" id="nama" value="Dewi" required><br><br>
+        
+        <label>Email:</label><br>
+        <input type="email" id="email" value="dewi@gmail.com" required><br><br>
+        
+        <button type="submit">Kirim Data (POST)</button>
+    </form>
+
+    <h3>Response API:</h3>
+    <pre id="output" style="background: #f4f4f4; padding: 10px; border-radius: 5px;"></pre>
+
+    <script>
+        document.getElementById('formMahasiswa').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = "Mengirim data...";
+
+            const payload = {
+                nim: document.getElementById('nim').value,
+                nama: document.getElementById('nama').value,
+                email: document.getElementById('email').value
+            };
+
+            try {
+                // Menggunakan path relatif agar sesuai dengan folder tempat file berada
+                const response = await fetch('api/mahasiswa.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                outputElement.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                outputElement.textContent = "Terjadi Kesalahan / Error:\n" + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

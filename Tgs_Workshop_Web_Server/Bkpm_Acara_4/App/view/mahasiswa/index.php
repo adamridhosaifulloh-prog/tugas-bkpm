@@ -33,7 +33,6 @@ ob_start();
             <th>Nama</th>
             <th>Prodi</th>
             <th>Angkatan</th>
-            <th>Aksi</th>
         </tr>
     </thead>
 

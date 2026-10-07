@@ -1,53 +1,97 @@
-<?php require __DIR__ . '/../header.php'; ?>
+<?php require_once __DIR__ . '/../partials/header.php'; ?>
 
-<div class="d-flex justify-content-between mb-3">
-    <h1 class="h3">Data Mahasiswa</h1>
-    <a href="<?= url('/mahasiswa/create') ?>" class="btn btn-primary">+ Tambah Mahasiswa</a>
+<?php require_once __DIR__ . '/../partials/navbar.php'; ?>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between mb-3">
+
+        <h2>Data Mahasiswa</h2>
+
+        <a
+            href="<?= BASE_URL ?>/mahasiswa/create"
+            class="btn btn-primary"
+        >
+            Tambah Mahasiswa
+        </a>
+
+    </div>
+
+    <?php if ($error !== ''): ?>
+
+        <div class="alert alert-danger">
+            <?= e($error) ?>
+        </div>
+
+    <?php endif; ?>
+
+    <table class="table table-bordered table-striped">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th>No</th>
+                <th>NIM</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Program Studi</th>
+                <th>Angkatan</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <?php
+            // Warna badge sesuai status mahasiswa
+            $warnaStatus = [
+                'aktif' => 'success',
+                'cuti'  => 'warning',
+                'lulus' => 'secondary',
+            ];
+            ?>
+
+            <?php foreach ($mahasiswa as $i => $m): ?>
+
+                <tr>
+                    <td><?= $i + 1 ?></td>
+                    <td><?= e($m['nim']) ?></td>
+                    <td><?= e($m['nama']) ?></td>
+                    <td><?= e($m['email']) ?></td>
+                    <td><?= e($m['prodi']) ?></td>
+                    <td><?= e($m['angkatan']) ?></td>
+                    <td>
+                        <span class="badge text-bg-<?= $warnaStatus[$m['status']] ?? 'light' ?>">
+                            <?= e(ucfirst($m['status'])) ?>
+                        </span>
+                    </td>
+
+                    <td>
+                        <a
+                            href="<?= BASE_URL ?>/mahasiswa/edit?id=<?= (int) $m['id'] ?>"
+                            class="btn btn-warning btn-sm"
+                        >
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+
+            <?php if (empty($mahasiswa) && $error === ''): ?>
+
+                <tr>
+                    <td colspan="8" class="text-center">Belum ada data.</td>
+                </tr>
+
+            <?php endif; ?>
+
+        </tbody>
+
+    </table>
+
 </div>
 
-<!-- Tugas Mandiri: form pencarian berdasarkan nama atau NIM -->
-<form method="GET" action="<?= url('/mahasiswa') ?>" class="row g-2 mb-3">
-    <div class="col-md-6">
-        <input type="text" name="q" value="<?= e($keyword) ?>" class="form-control"
-               placeholder="Cari berdasarkan nama atau NIM...">
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-outline-primary">Cari</button>
-        <?php if ($keyword !== ''): ?>
-            <a href="<?= url('/mahasiswa') ?>" class="btn btn-outline-secondary">Reset</a>
-        <?php endif; ?>
-    </div>
-</form>
-
-<table class="table table-striped table-bordered bg-white">
-    <thead class="table-dark">
-        <tr><th>No</th><th>NIM</th><th>Nama</th><th>Email</th><th>Prodi</th><th>Angkatan</th><th>Aksi</th></tr>
-    </thead>
-    <tbody>
-        <?php foreach ($daftar as $i => $m): ?>
-            <tr>
-                <td><?= $i + 1 ?></td>
-                <td><?= e($m['nim']) ?></td>
-                <td><?= e($m['nama']) ?></td>
-                <td><?= e($m['email']) ?></td>
-                <td><?= e($m['prodi_nama']) ?></td>
-                <td><?= e($m['angkatan']) ?></td>
-                <td>
-                    <a href="<?= url('/mahasiswa/edit?id=' . $m['id']) ?>" class="btn btn-sm btn-warning">Edit</a>
-                    <form method="POST" action="<?= url('/mahasiswa/destroy') ?>" class="d-inline"
-                          onsubmit="return confirm('Yakin ingin menghapus data ini?');">
-                        <input type="hidden" name="id" value="<?= (int) $m['id'] ?>">
-                        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <?php if (!$daftar): ?>
-            <tr><td colspan="7" class="text-center">
-                <?= $keyword !== '' ? 'Tidak ada data yang cocok.' : 'Belum ada data.' ?>
-            </td></tr>
-        <?php endif; ?>
-    </tbody>
-</table>
-
-<?php require __DIR__ . '/../footer.php'; ?>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

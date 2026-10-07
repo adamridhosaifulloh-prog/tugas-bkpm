@@ -1,5 +1,6 @@
 <?php
 
+// Konfigurasi koneksi database (dipakai oleh app/Models/Model.php)
 return [
     'host'     => 'localhost',
     'dbname'   => 'bkpm_acara_7',

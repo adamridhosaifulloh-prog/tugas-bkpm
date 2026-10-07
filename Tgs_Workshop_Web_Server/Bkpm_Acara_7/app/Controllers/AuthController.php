@@ -2,37 +2,48 @@
 
 class AuthController
 {
-    public function loginForm(): void
+    public function loginForm()
     {
-        // Kalau sudah login, tidak perlu lihat form login lagi
-        if (!empty($_SESSION['logged_in'])) {
-            redirect('/mahasiswa');
-        }
-
-        require __DIR__ . '/../Views/auth/login.php';
+        require_once __DIR__ . '/../Views/auth/login.php';
     }
 
-    public function login(): void
+    public function login()
     {
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        // Login sementara menggunakan data tetap (hardcode)
+        // Login sementara menggunakan hardcode
         if ($username === 'admin' && $password === '12345') {
-            session_regenerate_id(true);
-            $_SESSION['logged_in'] = true;
-            $_SESSION['user_name'] = 'Admin';
 
-            redirect('/mahasiswa', 'Selamat datang, Admin.');
+            $_SESSION['user'] = [
+                'username' => 'admin',
+                'nama' => 'Admin'
+            ];
+
+            // Flash message
+            $_SESSION['flash'] = 'Selamat datang, Admin';
+
+            header('Location: ' . BASE_URL . '/dashboard');
+            exit;
         }
 
-        redirect('/login', 'Username atau password salah.', 'danger');
+        $_SESSION['flash_error'] = 'Username atau password salah';
+
+        header('Location: ' . BASE_URL . '/login');
+        exit;
     }
 
-    public function logout(): void
+    public function logout()
     {
-        unset($_SESSION['logged_in'], $_SESSION['user_name']);
+        session_unset();
+        session_destroy();
 
-        redirect('/login', 'Anda telah logout.', 'info');
+        session_start();
+
+        // Flash message setelah logout
+        $_SESSION['flash'] = 'Anda telah logout';
+
+        header('Location: ' . BASE_URL . '/login');
+        exit;
     }
-}
+}
