@@ -1,0 +1,12 @@
+name: Staging - Sistem Informasi Akademik
+values:
+  - key: base_url
+    value: 'https://staging-domain-kamu.com'
+  - key: auth_username
+    value: ''
+  - key: auth_password
+    value: ''
+  - key: token
+    value: ''
+  - key: invalid_token
+    value: token_palsu

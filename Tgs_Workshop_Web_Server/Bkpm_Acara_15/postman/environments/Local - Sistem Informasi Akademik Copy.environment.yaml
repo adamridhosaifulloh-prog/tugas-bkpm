@@ -1,0 +1,12 @@
+name: Local - Sistem Informasi Akademik Copy
+values:
+  - key: base_url
+    value: 'http://localhost/sistem-informasi-akademik/public'
+  - key: auth_username
+    value: adam_test
+  - key: auth_password
+    value: Rahasia123!
+  - key: token
+    value: ''
+  - key: invalid_token
+    value: token_palsu
