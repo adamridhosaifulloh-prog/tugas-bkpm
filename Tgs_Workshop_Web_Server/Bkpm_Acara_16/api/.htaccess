@@ -1,0 +1,4 @@
+# Mengaktifkan URL bersih: /api/mahasiswa dan /api/mahasiswa/1
+RewriteEngine On
+RewriteRule ^mahasiswa/?$ mahasiswa.php [L,QSA]
+RewriteRule ^mahasiswa/([0-9]+)/?$ mahasiswa.php?id=$1 [L,QSA]
