@@ -24,7 +24,8 @@ async function muatDataMahasiswa() {
     try {
         const response = await fetch(`${BASE_URL}/mahasiswa`);
         const hasil = await response.json();
-
+        hasil.data = []; // SEMENTARA untuk uji data kosong
+    
         if (!response.ok || !hasil.success) {
             throw new Error(hasil.message || `HTTP ${response.status}`);
         }
