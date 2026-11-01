@@ -1,0 +1,28 @@
+$kind: http-request
+description: |-
+  Ubah data dengan id non-numerik
+  Partisi: Tidak valid
+  Data uji: id=abc
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa?id=abc"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: abc
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-11: Ubah data dengan id non-numerik -> 400", function () { pm.response.to.have.status(400); });
+      pm.test("TC-11: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 12000

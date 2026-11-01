@@ -1,0 +1,28 @@
+$kind: http-request
+description: |-
+  Ubah mahasiswa dengan data valid (update)
+  Partisi: Valid
+  Data uji: id ada, NIM sendiri tidak berubah
+  Hasil diharapkan: 200
+url: "{{base_url}}/mahasiswa?id={{mhs_id_1}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{mhs_id_1}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "Andi Saputra Updated",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-07: Ubah mahasiswa dengan data valid (update) -> 200", function () { pm.response.to.have.status(200); });
+      pm.test("TC-07: format JSON & success=true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+    language: text/javascript
+order: 8000

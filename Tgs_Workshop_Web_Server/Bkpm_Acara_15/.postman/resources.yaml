@@ -5,7 +5,9 @@ workspace:
 # Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
 
 cloudResources:
-  collections: {}
+  collections:
+    ../postman/collections/Acara 23 - Blackbox Testing API Sistem Informasi Akademik: 18e6c74e-11d6-47cb-a90a-fc6fc484e530
+    ../postman/collections/API Sistem Informasi Akademik (MVC): f0becf89-d23e-43c6-914b-701999e66870
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

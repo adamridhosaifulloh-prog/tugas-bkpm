@@ -1,0 +1,26 @@
+$kind: http-request
+description: |-
+  Tambah mahasiswa dengan NIM duplikat
+  Partisi: Tidak valid
+  Data uji: nim milik data lain (hasil TC-01)
+  Hasil diharapkan: 409
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "Budi Duplikat",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-03: Tambah mahasiswa dengan NIM duplikat -> 409", function () { pm.response.to.have.status(409); });
+      pm.test("TC-03: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 6000

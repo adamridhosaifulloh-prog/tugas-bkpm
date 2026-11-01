@@ -1,0 +1,28 @@
+$kind: http-request
+name: S-01 - (Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok
+description: |-
+  (Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok
+  Partisi: Valid
+  Data uji: nim=220100124
+  Hasil diharapkan: 201
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100124",
+      "nama": "Citra Dewi",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("S-01: (Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok -> 201", function () { pm.response.to.have.status(201); });
+      pm.test("S-01: format JSON & success=true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+      pm.collectionVariables.set("mhs_id_2", pm.response.json().data.id);
+    language: text/javascript
+order: 7000

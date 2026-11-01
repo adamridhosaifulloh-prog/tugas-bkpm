@@ -1,0 +1,964 @@
+{
+  "info": {
+    "name": "Acara 23 - Blackbox Testing API Sistem Informasi Akademik",
+    "description": "Manual/blackbox testing dengan equivalence partitioning. Pilih environment Local, lalu jalankan lewat Collection Runner (urutan harus dipertahankan).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "TC-04 - Login dengan kredensial benar (AuthController::login)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Login dengan kredensial benar (AuthController::login)\nPartisi: Valid\nData uji: username & password benar\nHasil diharapkan: 200",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{auth_username}}\",\n  \"password\": \"{{auth_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-04: Login dengan kredensial benar (AuthController::login) -> 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC-04: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+              "pm.environment.set(\"token\", pm.response.json().data.token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-05 - Login dengan password salah",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Login dengan password salah\nPartisi: Tidak valid\nData uji: password salah\nHasil diharapkan: 401",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{auth_username}}\",\n  \"password\": \"password_salah\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-05: Login dengan password salah -> 401\", function () { pm.response.to.have.status(401); });",
+              "pm.test(\"TC-05: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-06 - Akses store tanpa token (Auth::requireAuth)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Akses store tanpa token (Auth::requireAuth)\nPartisi: Tidak valid\nData uji: tanpa header Authorization\nHasil diharapkan: 401",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-06: Akses store tanpa token (Auth::requireAuth) -> 401\", function () { pm.response.to.have.status(401); });",
+              "pm.test(\"TC-06: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-01 - Tambah mahasiswa dengan NIM valid dan lengkap (store)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Tambah mahasiswa dengan NIM valid dan lengkap (store)\nPartisi: Valid\nData uji: nim=220100123\nHasil diharapkan: 201",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-01: Tambah mahasiswa dengan NIM valid dan lengkap (store) -> 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"TC-01: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+              "pm.collectionVariables.set(\"mhs_id_1\", pm.response.json().data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-02 - Tambah mahasiswa dengan NIM kosong",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Tambah mahasiswa dengan NIM kosong\nPartisi: Tidak valid\nData uji: nim=\"\"\nHasil diharapkan: 422",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-02: Tambah mahasiswa dengan NIM kosong -> 422\", function () { pm.response.to.have.status(422); });",
+              "pm.test(\"TC-02: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-03 - Tambah mahasiswa dengan NIM duplikat",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Tambah mahasiswa dengan NIM duplikat\nPartisi: Tidak valid\nData uji: nim milik data lain (hasil TC-01)\nHasil diharapkan: 409",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Budi Duplikat\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-03: Tambah mahasiswa dengan NIM duplikat -> 409\", function () { pm.response.to.have.status(409); });",
+              "pm.test(\"TC-03: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "S-01 - (Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "(Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok\nPartisi: Valid\nData uji: nim=220100124\nHasil diharapkan: 201",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100124\",\n  \"nama\": \"Citra Dewi\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"S-01: (Setup) Tambah mahasiswa kedua sebagai data uji NIM bentrok -> 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"S-01: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+              "pm.collectionVariables.set(\"mhs_id_2\", pm.response.json().data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-07 - Ubah mahasiswa dengan data valid (update)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Ubah mahasiswa dengan data valid (update)\nPartisi: Valid\nData uji: id ada, NIM sendiri tidak berubah\nHasil diharapkan: 200",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra Updated\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-07: Ubah mahasiswa dengan data valid (update) -> 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC-07: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-08 - Ubah NIM menjadi NIM milik mahasiswa lain",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Ubah NIM menjadi NIM milik mahasiswa lain\nPartisi: Tidak valid\nData uji: nim=220100124 (milik id lain)\nHasil diharapkan: 409",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100124\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-08: Ubah NIM menjadi NIM milik mahasiswa lain -> 409\", function () { pm.response.to.have.status(409); });",
+              "pm.test(\"TC-08: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-09 - Ubah dengan NIM kurang dari 9 digit",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Ubah dengan NIM kurang dari 9 digit\nPartisi: Tidak valid\nData uji: nim 8 digit\nHasil diharapkan: 422",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"22010012\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-09: Ubah dengan NIM kurang dari 9 digit -> 422\", function () { pm.response.to.have.status(422); });",
+              "pm.test(\"TC-09: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-10 - Ubah data dengan id yang tidak ada",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=999999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        },
+        "description": "Ubah data dengan id yang tidak ada\nPartisi: Tidak valid\nData uji: id=999999\nHasil diharapkan: 404",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-10: Ubah data dengan id yang tidak ada -> 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"TC-10: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-11 - Ubah data dengan id non-numerik",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "abc"
+            }
+          ]
+        },
+        "description": "Ubah data dengan id non-numerik\nPartisi: Tidak valid\nData uji: id=abc\nHasil diharapkan: 400",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-11: Ubah data dengan id non-numerik -> 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"TC-11: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-12 - Ubah data tanpa token",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Ubah data tanpa token\nPartisi: Tidak valid\nData uji: tanpa header Authorization\nHasil diharapkan: 401",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-12: Ubah data tanpa token -> 401\", function () { pm.response.to.have.status(401); });",
+              "pm.test(\"TC-12: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-13 - Ubah dengan nama kosong",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Ubah dengan nama kosong\nPartisi: Tidak valid\nData uji: nama=\"\"\nHasil diharapkan: 422",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"220100123\",\n  \"nama\": \"\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-13: Ubah dengan nama kosong -> 422\", function () { pm.response.to.have.status(422); });",
+              "pm.test(\"TC-13: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-14 - Hapus mahasiswa dengan id valid (destroy)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_2}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_2}}"
+            }
+          ]
+        },
+        "description": "Hapus mahasiswa dengan id valid (destroy)\nPartisi: Valid\nData uji: id hasil S-01\nHasil diharapkan: 200"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-14: Hapus mahasiswa dengan id valid (destroy) -> 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC-14: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-15 - Hapus id yang sudah dihapus",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_2}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_2}}"
+            }
+          ]
+        },
+        "description": "Hapus id yang sudah dihapus\nPartisi: Tidak valid\nData uji: id hasil TC-14\nHasil diharapkan: 404"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-15: Hapus id yang sudah dihapus -> 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"TC-15: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-16 - Hapus dengan id non-numerik",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "abc"
+            }
+          ]
+        },
+        "description": "Hapus dengan id non-numerik\nPartisi: Tidak valid\nData uji: id=abc\nHasil diharapkan: 400"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-16: Hapus dengan id non-numerik -> 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"TC-16: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-17 - Hapus tanpa parameter id",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Hapus tanpa parameter id\nPartisi: Tidak valid\nData uji: tanpa ?id=\nHasil diharapkan: 400"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-17: Hapus tanpa parameter id -> 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"TC-17: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-18 - Hapus tanpa token",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Hapus tanpa token\nPartisi: Tidak valid\nData uji: tanpa header Authorization\nHasil diharapkan: 401"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-18: Hapus tanpa token -> 401\", function () { pm.response.to.have.status(401); });",
+              "pm.test(\"TC-18: format JSON & success=false\", function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-19 - Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{mhs_id_1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{mhs_id_1}}"
+            }
+          ]
+        },
+        "description": "Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid)\nPartisi: Valid\nData uji: id hasil TC-01\nHasil diharapkan: 200"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-19: Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid) -> 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC-19: format JSON & success=true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "mhs_id_1",
+      "value": ""
+    },
+    {
+      "key": "mhs_id_2",
+      "value": ""
+    }
+  ]
+}

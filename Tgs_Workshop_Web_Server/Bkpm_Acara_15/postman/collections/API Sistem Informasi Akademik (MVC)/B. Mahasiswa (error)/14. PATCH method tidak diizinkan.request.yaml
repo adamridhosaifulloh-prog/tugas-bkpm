@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id=1"
+method: PATCH
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "1"
+body:
+  type: json
+  content: |-
+    {
+        "nama": "X"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 405", function () { pm.response.to.have.status(405); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 8000

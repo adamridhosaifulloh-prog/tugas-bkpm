@@ -1,0 +1,26 @@
+$kind: http-request
+name: TC-06 - Akses store tanpa token (Auth::requireAuth)
+description: |-
+  Akses store tanpa token (Auth::requireAuth)
+  Partisi: Tidak valid
+  Data uji: tanpa header Authorization
+  Hasil diharapkan: 401
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-06: Akses store tanpa token (Auth::requireAuth) -> 401", function () { pm.response.to.have.status(401); });
+      pm.test("TC-06: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 3000

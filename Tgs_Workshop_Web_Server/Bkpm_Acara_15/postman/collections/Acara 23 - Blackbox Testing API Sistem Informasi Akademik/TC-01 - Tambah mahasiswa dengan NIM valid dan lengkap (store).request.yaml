@@ -1,0 +1,27 @@
+$kind: http-request
+description: |-
+  Tambah mahasiswa dengan NIM valid dan lengkap (store)
+  Partisi: Valid
+  Data uji: nim=220100123
+  Hasil diharapkan: 201
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-01: Tambah mahasiswa dengan NIM valid dan lengkap (store) -> 201", function () { pm.response.to.have.status(201); });
+      pm.test("TC-01: format JSON & success=true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+      pm.collectionVariables.set("mhs_id_1", pm.response.json().data.id);
+    language: text/javascript
+order: 4000

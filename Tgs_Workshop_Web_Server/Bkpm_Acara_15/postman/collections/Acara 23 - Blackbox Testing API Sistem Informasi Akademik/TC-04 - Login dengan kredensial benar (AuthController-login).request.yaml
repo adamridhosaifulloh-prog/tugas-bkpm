@@ -1,0 +1,26 @@
+$kind: http-request
+name: TC-04 - Login dengan kredensial benar (AuthController::login)
+description: |-
+  Login dengan kredensial benar (AuthController::login)
+  Partisi: Valid
+  Data uji: username & password benar
+  Hasil diharapkan: 200
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{auth_username}}",
+      "password": "{{auth_password}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-04: Login dengan kredensial benar (AuthController::login) -> 200", function () { pm.response.to.have.status(200); });
+      pm.test("TC-04: format JSON & success=true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+      pm.environment.set("token", pm.response.json().data.token);
+    language: text/javascript
+order: 1000

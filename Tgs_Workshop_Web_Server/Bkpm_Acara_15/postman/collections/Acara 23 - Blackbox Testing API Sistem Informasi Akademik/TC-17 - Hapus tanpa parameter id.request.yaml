@@ -1,0 +1,17 @@
+$kind: http-request
+description: |-
+  Hapus tanpa parameter id
+  Partisi: Tidak valid
+  Data uji: tanpa ?id=
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-17: Hapus tanpa parameter id -> 400", function () { pm.response.to.have.status(400); });
+      pm.test("TC-17: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 18000

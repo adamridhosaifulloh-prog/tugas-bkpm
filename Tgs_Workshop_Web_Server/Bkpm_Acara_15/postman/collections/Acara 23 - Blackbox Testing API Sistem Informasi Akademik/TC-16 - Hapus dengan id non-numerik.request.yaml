@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Hapus dengan id non-numerik
+  Partisi: Tidak valid
+  Data uji: id=abc
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa?id=abc"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  id: abc
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-16: Hapus dengan id non-numerik -> 400", function () { pm.response.to.have.status(400); });
+      pm.test("TC-16: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 17000

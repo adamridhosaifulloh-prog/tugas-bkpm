@@ -1,0 +1,17 @@
+$kind: http-request
+description: |-
+  Hapus tanpa token
+  Partisi: Tidak valid
+  Data uji: tanpa header Authorization
+  Hasil diharapkan: 401
+url: "{{base_url}}/mahasiswa?id={{mhs_id_1}}"
+method: DELETE
+queryParams:
+  id: "{{mhs_id_1}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-18: Hapus tanpa token -> 401", function () { pm.response.to.have.status(401); });
+      pm.test("TC-18: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 19000

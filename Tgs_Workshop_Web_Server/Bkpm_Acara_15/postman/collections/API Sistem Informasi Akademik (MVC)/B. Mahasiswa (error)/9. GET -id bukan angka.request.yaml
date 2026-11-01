@@ -1,0 +1,13 @@
+$kind: http-request
+name: 9. GET ?id bukan angka
+url: "{{base_url}}/mahasiswa?id=abc"
+method: GET
+queryParams:
+  id: abc
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 400", function () { pm.response.to.have.status(400); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 3000

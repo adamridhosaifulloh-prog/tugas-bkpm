@@ -1,0 +1,12 @@
+name: Local - Sistem Informasi Akademik Copy 2
+values:
+  - key: base_url
+    value: 'http://localhost/tugas-bkpm/Tgs_Workshop_Web_Server/Bkpm_Acara_20/sistem-informasi-akademik/public'
+  - key: auth_username
+    value: adam_test
+  - key: auth_password
+    value: Rahasia123!
+  - key: token
+    value: ''
+  - key: invalid_token
+    value: token_palsu

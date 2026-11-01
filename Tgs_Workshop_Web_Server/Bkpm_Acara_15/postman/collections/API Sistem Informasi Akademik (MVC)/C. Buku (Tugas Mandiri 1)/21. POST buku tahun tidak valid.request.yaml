@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/buku"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "judul": "X",
+        "penulis": "Y",
+        "penerbit": "Z",
+        "tahun_terbit": "abcd"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 400", function () { pm.response.to.have.status(400); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 6000

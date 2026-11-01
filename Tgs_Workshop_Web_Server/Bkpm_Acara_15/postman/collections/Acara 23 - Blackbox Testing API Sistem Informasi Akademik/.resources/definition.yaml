@@ -1,0 +1,5 @@
+$kind: collection
+description: Manual/blackbox testing dengan equivalence partitioning. Pilih environment Local, lalu jalankan lewat Collection Runner (urutan harus dipertahankan).
+variables:
+  mhs_id_1: ""
+  mhs_id_2: ""

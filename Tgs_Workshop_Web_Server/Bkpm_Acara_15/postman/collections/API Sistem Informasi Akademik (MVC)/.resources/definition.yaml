@@ -1,0 +1,6 @@
+$kind: collection
+description: "Acara 17-20: CRUD API MVC, registrasi user, login, JWT Bearer Token, dan pengujian autentikasi."
+variables:
+  base_url: http://localhost/tugas-bkpm/Tgs_Workshop_Web_Server/Bkpm_Acara_20/sistem-informasi-akademik/public
+  mhs_id: ""
+  buku_id: ""

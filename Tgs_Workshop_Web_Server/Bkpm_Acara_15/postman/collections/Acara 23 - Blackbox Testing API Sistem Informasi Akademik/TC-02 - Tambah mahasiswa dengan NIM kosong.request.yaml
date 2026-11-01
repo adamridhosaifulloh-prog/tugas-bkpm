@@ -1,0 +1,26 @@
+$kind: http-request
+description: |-
+  Tambah mahasiswa dengan NIM kosong
+  Partisi: Tidak valid
+  Data uji: nim=""
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-02: Tambah mahasiswa dengan NIM kosong -> 422", function () { pm.response.to.have.status(422); });
+      pm.test("TC-02: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 5000

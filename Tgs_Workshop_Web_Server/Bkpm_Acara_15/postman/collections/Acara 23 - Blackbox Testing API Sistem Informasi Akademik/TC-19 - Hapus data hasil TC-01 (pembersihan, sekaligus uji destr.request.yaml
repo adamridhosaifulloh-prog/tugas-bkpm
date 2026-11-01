@@ -1,0 +1,20 @@
+$kind: http-request
+name: TC-19 - Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid)
+description: |-
+  Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid)
+  Partisi: Valid
+  Data uji: id hasil TC-01
+  Hasil diharapkan: 200
+url: "{{base_url}}/mahasiswa?id={{mhs_id_1}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{mhs_id_1}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-19: Hapus data hasil TC-01 (pembersihan, sekaligus uji destroy valid) -> 200", function () { pm.response.to.have.status(200); });
+      pm.test("TC-19: format JSON & success=true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+    language: text/javascript
+order: 20000

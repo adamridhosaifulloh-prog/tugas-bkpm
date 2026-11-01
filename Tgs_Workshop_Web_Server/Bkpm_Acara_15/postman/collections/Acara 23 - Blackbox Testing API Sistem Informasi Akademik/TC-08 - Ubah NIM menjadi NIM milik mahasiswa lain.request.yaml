@@ -1,0 +1,28 @@
+$kind: http-request
+description: |-
+  Ubah NIM menjadi NIM milik mahasiswa lain
+  Partisi: Tidak valid
+  Data uji: nim=220100124 (milik id lain)
+  Hasil diharapkan: 409
+url: "{{base_url}}/mahasiswa?id={{mhs_id_1}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{mhs_id_1}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100124",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-08: Ubah NIM menjadi NIM milik mahasiswa lain -> 409", function () { pm.response.to.have.status(409); });
+      pm.test("TC-08: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 9000

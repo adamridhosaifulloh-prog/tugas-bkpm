@@ -1,0 +1,28 @@
+$kind: http-request
+description: |-
+  Ubah dengan nama kosong
+  Partisi: Tidak valid
+  Data uji: nama=""
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa?id={{mhs_id_1}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{mhs_id_1}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "220100123",
+      "nama": "",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-13: Ubah dengan nama kosong -> 422", function () { pm.response.to.have.status(422); });
+      pm.test("TC-13: format JSON & success=false", function () { pm.expect(pm.response.json().success).to.eql(false); });
+    language: text/javascript
+order: 14000
