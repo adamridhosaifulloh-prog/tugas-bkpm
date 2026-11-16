@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Sistem Informasi Akademik</title>
+  <script>
+    // Langkah 4: lindungi halaman. Tanpa token, pengguna dikembalikan ke login.
+    if (!localStorage.getItem('token')) {
+      window.location.replace('login.html');
+    }
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; color: #222; margin: 0; }
+    header { background: #1565c0; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.2rem; margin: 0; }
+    #info-user { margin-right: 12px; font-size: .9rem; }
+    main { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+    .ringkasan { font-size: .9rem; color: #555; }
+    .ringkasan strong { display: block; font-size: 2rem; color: #1565c0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+    th { background: #f0f0f0; }
+    .status td { text-align: center; color: #555; font-style: italic; }
+    .status.error td { color: #b00020; font-style: normal; }
+    button { padding: 6px 12px; border: 0; border-radius: 4px; cursor: pointer; background: #1565c0; color: #fff; }
+    button.hapus { background: #c62828; }
+    button.ubah { background: #ef6c00; }
+    button.netral { background: #607d8b; }
+    #btn-logout { background: #fff; color: #1565c0; }
+    .bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .bar h2 { font-size: 1.1rem; margin: 0; }
+    form#form-mhs { display: grid; grid-template-columns: 1fr 1fr 1fr auto auto; gap: 8px; margin-bottom: 1rem; }
+    form#form-mhs input { padding: 8px; border: 1px solid #bbb; border-radius: 4px; }
+    #pesan { min-height: 1.2em; margin-bottom: .5rem; font-size: .9rem; }
+    #pesan.ok { color: #2e7d32; }
+    #pesan.error { color: #b00020; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dashboard Sistem Informasi Akademik</h1>
+    <div>
+      <span id="info-user"></span>
+      <button type="button" id="btn-logout">Logout</button>
+    </div>
+  </header>
+  <main>
+    <div class="card ringkasan">
+      Total Mahasiswa
+      <strong id="total-mahasiswa">-</strong>
+    </div>
+
+    <div class="card">
+      <div class="bar">
+        <h2>Data Mahasiswa</h2>
+        <button type="button" id="btn-tambah" class="aksi-admin">Tambah</button>
+      </div>
+      <div id="pesan"></div>
+      <form id="form-mhs" class="aksi-admin" hidden>
+        <input type="text" id="nim" placeholder="NIM (9 digit)" required>
+        <input type="text" id="nama" placeholder="Nama" required>
+        <input type="text" id="prodi" placeholder="Program Studi" required>
+        <button type="submit" id="btn-simpan">Simpan</button>
+        <button type="button" id="btn-batal" class="netral">Batal</button>
+      </form>
+      <table id="tabel-mahasiswa">
+        <thead>
+          <tr><th>NIM</th><th>Nama</th><th>Program Studi</th><th class="aksi-admin">Aksi</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+  <script src="dashboard.js"></script>
+</body>
+</html>

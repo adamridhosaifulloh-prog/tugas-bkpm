@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token_user}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "250000001",
+      "nama": "Uji RBAC",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-23 User tambah data ditolak -> 403", function () { pm.expect([403]).to.include(pm.response.code); });
+      pm.test("TC-23: pesan 403", function () { pm.expect(pm.response.json().message).to.include("hanya admin"); });
+    language: text/javascript
+order: 6000

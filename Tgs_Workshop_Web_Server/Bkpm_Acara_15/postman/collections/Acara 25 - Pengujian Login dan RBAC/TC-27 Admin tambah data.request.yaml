@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token_admin}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "250000001",
+      "nama": "Uji RBAC",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-27 Admin tambah data -> 201", function () { pm.expect([201]).to.include(pm.response.code); });
+      pm.collectionVariables.set("id_uji", pm.response.json().data.id);
+    language: text/javascript
+order: 10000

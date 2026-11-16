@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id=1"
+method: DELETE
+headers:
+  Authorization: Bearer {{token_user}}
+queryParams:
+  id: "1"
+scripts:
+  - type: afterResponse
+    code: pm.test("TC-25 User hapus data ditolak -> 403", function () { pm.expect([403]).to.include(pm.response.code); });
+    language: text/javascript
+order: 8000

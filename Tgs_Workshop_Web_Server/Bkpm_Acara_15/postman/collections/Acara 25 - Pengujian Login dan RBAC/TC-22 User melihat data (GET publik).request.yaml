@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: GET
+headers:
+  Authorization: Bearer {{token_user}}
+scripts:
+  - type: afterResponse
+    code: pm.test("TC-22 User melihat data (GET publik) -> 200", function () { pm.expect([200]).to.include(pm.response.code); });
+    language: text/javascript
+order: 5000

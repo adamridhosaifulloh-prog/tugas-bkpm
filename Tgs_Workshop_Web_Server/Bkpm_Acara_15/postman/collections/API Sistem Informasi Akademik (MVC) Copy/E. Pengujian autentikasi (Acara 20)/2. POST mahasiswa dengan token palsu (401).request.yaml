@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{invalid_token}}
+body:
+  type: json
+  content: |-
+    {
+        "nim": "2201098",
+        "nama": "Tes Token Palsu",
+        "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test("Status code 401", function () { pm.response.to.have.status(401); });
+    language: text/javascript
+order: 2000

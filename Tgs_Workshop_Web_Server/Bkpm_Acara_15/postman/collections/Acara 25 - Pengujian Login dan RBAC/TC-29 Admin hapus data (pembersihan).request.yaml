@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id={{id_uji}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{token_admin}}
+queryParams:
+  id: "{{id_uji}}"
+scripts:
+  - type: afterResponse
+    code: pm.test("TC-29 Admin hapus data (pembersihan) -> 200", function () { pm.expect([200]).to.include(pm.response.code); });
+    language: text/javascript
+order: 12000

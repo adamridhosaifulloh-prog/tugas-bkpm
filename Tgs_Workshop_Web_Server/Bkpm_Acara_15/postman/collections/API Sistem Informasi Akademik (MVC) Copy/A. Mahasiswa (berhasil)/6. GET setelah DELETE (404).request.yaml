@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id={{mhs_id}}"
+method: GET
+queryParams:
+  id: "{{mhs_id}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 404", function () { pm.response.to.have.status(404); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 6000

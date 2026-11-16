@@ -1,0 +1,13 @@
+$kind: http-request
+name: 18. GET buku ?id
+url: "{{base_url}}/buku?id={{buku_id}}"
+method: GET
+queryParams:
+  id: "{{buku_id}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 200", function () { pm.response.to.have.status(200); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 3000

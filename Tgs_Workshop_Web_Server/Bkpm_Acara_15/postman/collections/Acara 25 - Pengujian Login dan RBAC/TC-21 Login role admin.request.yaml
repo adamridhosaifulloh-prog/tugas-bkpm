@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{admin_username}}",
+      "password": "{{rbac_password}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-21 Login role admin -> 200", function () { pm.expect([200]).to.include(pm.response.code); });
+      pm.test("TC-21: role = admin (jalankan SQL jadikan_admin.sql bila gagal)", function () { pm.expect(pm.response.json().data.role).to.eql("admin"); });
+      pm.collectionVariables.set("token_admin", pm.response.json().data.token);
+    language: text/javascript
+order: 4000

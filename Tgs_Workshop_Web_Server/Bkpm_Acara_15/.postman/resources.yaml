@@ -8,6 +8,8 @@ cloudResources:
   collections:
     ../postman/collections/Acara 23 - Blackbox Testing API Sistem Informasi Akademik: 18e6c74e-11d6-47cb-a90a-fc6fc484e530
     ../postman/collections/API Sistem Informasi Akademik (MVC): f0becf89-d23e-43c6-914b-701999e66870
+    ../postman/collections/Acara 25 - Pengujian Login dan RBAC: 1294d52b-bdec-4cc8-b98b-8c98c075b49a
+    ../postman/collections/API Sistem Informasi Akademik (MVC) Copy: 3f25cf6b-3fb3-4f76-a06e-1a4302acb848
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

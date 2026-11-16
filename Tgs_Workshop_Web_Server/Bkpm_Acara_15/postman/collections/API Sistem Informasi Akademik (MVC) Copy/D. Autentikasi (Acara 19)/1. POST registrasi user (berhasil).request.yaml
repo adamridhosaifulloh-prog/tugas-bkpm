@@ -1,0 +1,22 @@
+$kind: http-request
+description: Membuat user baru. Gunakan username dan email yang belum pernah terdaftar.
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "username": "adam_test",
+        "email": "adam_test@example.com",
+        "password": "Rahasia123!"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 201", function () { pm.response.to.have.status(201); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+      pm.test("Registrasi berhasil", function () { pm.expect(pm.response.json().success).to.eql(true); });
+    language: text/javascript
+order: 1000

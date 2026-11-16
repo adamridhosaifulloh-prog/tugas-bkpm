@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{user_username}}",
+      "email": "user_test@example.com",
+      "password": "{{rbac_password}}"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test("S-01 Daftar akun user_test -> 201,409", function () { pm.expect([201,409]).to.include(pm.response.code); });
+    language: text/javascript
+order: 1000

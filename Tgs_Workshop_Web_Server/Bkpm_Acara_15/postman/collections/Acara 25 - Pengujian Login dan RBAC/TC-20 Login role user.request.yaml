@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{user_username}}",
+      "password": "{{rbac_password}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC-20 Login role user -> 200", function () { pm.expect([200]).to.include(pm.response.code); });
+      pm.test("TC-20: role = user", function () { pm.expect(pm.response.json().data.role).to.eql("user"); });
+      pm.collectionVariables.set("token_user", pm.response.json().data.token);
+    language: text/javascript
+order: 3000

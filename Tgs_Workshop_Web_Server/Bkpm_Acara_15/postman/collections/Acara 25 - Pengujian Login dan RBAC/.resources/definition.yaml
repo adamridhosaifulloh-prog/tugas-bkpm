@@ -1,0 +1,9 @@
+$kind: collection
+description: "Prasyarat: akun admin_test harus diubah role-nya menjadi admin lewat database/jadikan_admin.sql (satu kali). Pilih environment Local, lalu jalankan lewat Collection Runner berurutan."
+variables:
+  user_username: user_test
+  admin_username: admin_test
+  rbac_password: Rahasia123!
+  token_user: ""
+  token_admin: ""
+  id_uji: ""

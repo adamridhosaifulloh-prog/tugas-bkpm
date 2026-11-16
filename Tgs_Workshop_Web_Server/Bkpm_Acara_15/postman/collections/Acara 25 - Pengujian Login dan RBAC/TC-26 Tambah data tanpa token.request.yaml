@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "250000001",
+      "nama": "Uji RBAC",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test("TC-26 Tambah data tanpa token -> 401", function () { pm.expect([401]).to.include(pm.response.code); });
+    language: text/javascript
+order: 9000

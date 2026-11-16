@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: json
+  content: |-
+    {
+        "nim": "2201001",
+        "nama": "Andi Saputra",
+        "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 201", function () { pm.response.to.have.status(201); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+      if (pm.response.code === 201) { pm.collectionVariables.set("mhs_id", pm.response.json().data.id); }
+    language: text/javascript
+order: 1000

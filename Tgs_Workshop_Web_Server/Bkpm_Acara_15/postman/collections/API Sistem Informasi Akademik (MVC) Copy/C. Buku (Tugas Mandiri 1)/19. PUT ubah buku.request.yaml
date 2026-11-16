@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{base_url}}/buku?id={{buku_id}}"
+method: PUT
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "{{buku_id}}"
+body:
+  type: json
+  content: |-
+    {
+        "judul": "Pemrograman PHP Native (Edisi 2)",
+        "penulis": "Adam Ridho",
+        "penerbit": "Polije Press",
+        "tahun_terbit": 2026
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 200", function () { pm.response.to.have.status(200); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+    language: text/javascript
+order: 4000
