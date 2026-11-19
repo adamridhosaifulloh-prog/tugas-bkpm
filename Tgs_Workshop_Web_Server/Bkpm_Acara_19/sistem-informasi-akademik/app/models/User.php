@@ -11,6 +11,11 @@ class User
 
     public function create(array $data): string
     {
+
+        if (!filter_var($data['email'] ?? '', FILTER_VALIDATE_EMAIL)) {
+        throw new InvalidArgumentException('Format email tidak valid');
+        }
+
         $stmt = $this->db->prepare(
             'INSERT INTO users (username, email, password)
              VALUES (:u, :e, :p)'

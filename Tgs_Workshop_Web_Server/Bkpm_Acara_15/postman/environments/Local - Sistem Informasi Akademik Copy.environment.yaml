@@ -7,6 +7,6 @@ values:
   - key: auth_password
     value: Rahasia123!
   - key: token
-    value: ''
+    secret: true
   - key: invalid_token
     value: token_palsu
