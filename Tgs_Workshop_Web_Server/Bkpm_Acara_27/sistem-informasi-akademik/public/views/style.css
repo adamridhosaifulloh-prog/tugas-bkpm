@@ -1,0 +1,17 @@
+body { font-family: Arial, sans-serif; background: #f4f6f8; color: #222; margin: 0; }
+header { background: #1565c0; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+header h1 { font-size: 1.2rem; margin: 0; }
+main { max-width: 560px; margin: 1.5rem auto; padding: 0 1rem; }
+.card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.2rem 1.5rem; }
+.card h2 { margin-top: 0; font-size: 1.1rem; }
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: .9rem; margin-bottom: 4px; font-weight: bold; }
+.field input { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #bbb; border-radius: 4px; font-size: 1rem; }
+.field input.invalid { border-color: #c62828; background: #fff5f5; }
+.err { display: block; color: #c62828; font-size: .8rem; min-height: 1em; margin-top: 3px; }
+.petunjuk { color: #666; font-size: .8rem; }
+.aksi { display: flex; gap: 8px; margin-top: 1rem; }
+button, a.btn { padding: 8px 14px; border: 0; border-radius: 4px; cursor: pointer; background: #1565c0; color: #fff; text-decoration: none; font-size: .95rem; display: inline-block; }
+button:disabled { opacity: .6; cursor: wait; }
+a.netral, button.netral { background: #607d8b; }
+img.foto-lama { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; display: block; margin-bottom: 6px; }
