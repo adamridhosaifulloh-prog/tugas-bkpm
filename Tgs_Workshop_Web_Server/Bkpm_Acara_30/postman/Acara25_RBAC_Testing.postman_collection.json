@@ -1,0 +1,562 @@
+{
+  "info": {
+    "name": "Acara 25 - Pengujian Login dan RBAC",
+    "description": "Prasyarat: akun admin_test harus diubah role-nya menjadi admin lewat database/jadikan_admin.sql (satu kali). Pilih environment Local, lalu jalankan lewat Collection Runner berurutan.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "S-01 Daftar akun user_test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{user_username}}\",\n  \"email\": \"user_test@example.com\",\n  \"password\": \"{{rbac_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"S-01 Daftar akun user_test -> 201,409\", function () { pm.expect([201,409]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "S-02 Daftar akun admin_test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{admin_username}}\",\n  \"email\": \"admin_test@example.com\",\n  \"password\": \"{{rbac_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"S-02 Daftar akun admin_test -> 201,409\", function () { pm.expect([201,409]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-20 Login role user",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{user_username}}\",\n  \"password\": \"{{rbac_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-20 Login role user -> 200\", function () { pm.expect([200]).to.include(pm.response.code); });",
+              "pm.test(\"TC-20: role = user\", function () { pm.expect(pm.response.json().data.role).to.eql(\"user\"); });",
+              "pm.collectionVariables.set(\"token_user\", pm.response.json().data.token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-21 Login role admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{admin_username}}\",\n  \"password\": \"{{rbac_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-21 Login role admin -> 200\", function () { pm.expect([200]).to.include(pm.response.code); });",
+              "pm.test(\"TC-21: role = admin (jalankan SQL jadikan_admin.sql bila gagal)\", function () { pm.expect(pm.response.json().data.role).to.eql(\"admin\"); });",
+              "pm.collectionVariables.set(\"token_admin\", pm.response.json().data.token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-22 User melihat data (GET publik)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_user}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-22 User melihat data (GET publik) -> 200\", function () { pm.expect([200]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-23 User tambah data ditolak",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_user}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"250000001\",\n  \"nama\": \"Uji RBAC\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-23 User tambah data ditolak -> 403\", function () { pm.expect([403]).to.include(pm.response.code); });",
+              "pm.test(\"TC-23: pesan 403\", function () { pm.expect(pm.response.json().message).to.include(\"hanya admin\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-24 User ubah data ditolak",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_user}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"250000001\",\n  \"nama\": \"Uji RBAC\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-24 User ubah data ditolak -> 403\", function () { pm.expect([403]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-25 User hapus data ditolak",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_user}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-25 User hapus data ditolak -> 403\", function () { pm.expect([403]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-26 Tambah data tanpa token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"250000001\",\n  \"nama\": \"Uji RBAC\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-26 Tambah data tanpa token -> 401\", function () { pm.expect([401]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-27 Admin tambah data",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"250000001\",\n  \"nama\": \"Uji RBAC\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-27 Admin tambah data -> 201\", function () { pm.expect([201]).to.include(pm.response.code); });",
+              "pm.collectionVariables.set(\"id_uji\", pm.response.json().data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-28 Admin ubah data",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id_uji}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id_uji}}"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"250000001\",\n  \"nama\": \"Uji RBAC Update\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-28 Admin ubah data -> 200\", function () { pm.expect([200]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-29 Admin hapus data (pembersihan)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id_uji}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id_uji}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-29 Admin hapus data (pembersihan) -> 200\", function () { pm.expect([200]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "user_username",
+      "value": "user_test"
+    },
+    {
+      "key": "admin_username",
+      "value": "admin_test"
+    },
+    {
+      "key": "rbac_password",
+      "value": "Rahasia123!"
+    },
+    {
+      "key": "token_user",
+      "value": ""
+    },
+    {
+      "key": "token_admin",
+      "value": ""
+    },
+    {
+      "key": "id_uji",
+      "value": ""
+    }
+  ]
+}

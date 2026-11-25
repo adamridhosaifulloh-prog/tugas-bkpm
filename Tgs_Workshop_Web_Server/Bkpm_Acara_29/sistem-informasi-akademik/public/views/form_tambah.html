@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tambah Mahasiswa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><h1>Tambah Mahasiswa</h1></header>
+  <main>
+    <div class="card">
+      <h2>Formulir Data Mahasiswa</h2>
+      <!-- novalidate: validasi ditangani validasi.js agar pesannya seragam -->
+      <form id="form-mhs" novalidate>
+        <div class="field">
+          <label for="nim">NIM</label>
+          <input type="text" id="nim" inputmode="numeric" maxlength="9" placeholder="9 digit angka">
+          <small class="err" data-for="nim"></small>
+        </div>
+        <div class="field">
+          <label for="nama">Nama</label>
+          <input type="text" id="nama" maxlength="100">
+          <small class="err" data-for="nama"></small>
+        </div>
+        <div class="field">
+          <label for="prodi">Program Studi</label>
+          <input type="text" id="prodi" maxlength="50">
+          <small class="err" data-for="prodi"></small>
+        </div>
+        <div class="field">
+          <label for="foto">Foto (opsional)</label>
+          <input type="file" id="foto" accept="image/png,image/jpeg">
+          <small class="petunjuk">JPG atau PNG, maksimal 2 MB</small>
+          <small class="err" data-for="foto"></small>
+        </div>
+        <div class="aksi">
+          <button type="submit" id="btn-simpan">Simpan</button>
+          <a class="btn netral" href="dashboard.html">Batal</a>
+        </div>
+      </form>
+    </div>
+  </main>
+  <script src="notifikasi.js"></script>
+  <script src="request.js"></script>
+  <script src="common.js"></script>
+  <script src="validasi.js"></script>
+  <script src="form_tambah.js"></script>
+</body>
+</html>

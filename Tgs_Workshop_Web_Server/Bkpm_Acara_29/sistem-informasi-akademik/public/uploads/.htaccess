@@ -1,0 +1,5 @@
+# Keamanan: berkas di folder ini tidak boleh dieksekusi sebagai skrip
+RewriteEngine Off
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi)$">
+    Require all denied
+</FilesMatch>
